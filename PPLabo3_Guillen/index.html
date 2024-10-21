@@ -4,86 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Vehículos</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Registro de Vehículos</h1>
-    <form id="form-datos">
-        <h2>Operaciones ABM</h2>
-        <div class="form-group">
-            <label for="id">ID:</label>
-            <input type="text" id="id" required>
-        </div>
-        <div class="form-group">
-            <label for="modelo">Modelo:</label>
-            <input type="text" id="modelo" required>
-        </div>
-        <div class="form-group">
-            <label for="anoFab">Año Fabricación:</label>
-            <input type="number" id="anoFab" required>
-        </div>
-        <div class="form-group">
-            <label for="velMax">Velocidad Máxima:</label>
-            <input type="number" id="velMax" required>
-        </div>
-        <div class="form-group">
-            <label for="altMax">Altura Máxima:</label>
-            <input type="number" id="altMax" required>
-        </div>
-        <div class="form-group">
-            <label for="autonomia">Autonomía:</label>
-            <input type="number" id="autonomia" required>
-        </div>
-        <div class="form-group">
-            <label for="cantPue">Cantidad de Puertas:</label>
-            <input type="number" id="cantPue" required>
-        </div>
-        <div class="form-group">
-            <label for="cantRue">Cantidad de Ruedas:</label>
-            <input type="number" id="cantRue" required>
-        </div>
-        <div class="form-group">
-            <label>Tipo de Vehículo:</label>
-            <input type="radio" id="aereo" name="tipo" value="aereo" required>
-            <label for="aereo">Aéreo</label>
-            <input type="radio" id="terrestre" name="tipo" value="terrestre">
-            <label for="terrestre">Terrestre</label>
-        </div>
+
+    <!-- Formulario Datos -->
+    <div id="form-datos" class="form-container">
+        <h2>Formulario ABM</h2>
         <button type="button" id="btn-agregar">Agregar</button>
-        <button type="button" id="btn-modificar">Modificar</button>
-        <button type="button" id="btn-eliminar">Eliminar</button>
-    </form>
+        <div class="form-group">
+            <label for="filtro">Filtrar por:</label>
+            <select id="filtro">
+                <option value="todos">Todos</option>
+                <option value="aereo">Aéreos</option>
+                <option value="terrestre">Terrestres</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="button" id="btn-calcular">Calcular Velocidad Promedio</button>
+            <input type="text" id="velocidad-promedio" placeholder="Promedio" readonly>
+        </div>
 
-    <div class="form-group">
-        <label for="filtro">Filtrar por:</label>
-        <select id="filtro">
-            <option value="todos">Todos</option>
-            <option value="aereo">Aéreos</option>
-            <option value="terrestre">Terrestres</option>
-        </select>
+        <h2>Vehículos Agregados</h2>
+        <table id="tabla-vehiculos">
+            <thead>
+                <tr>
+                    <th class="sortable" data-column="id">ID</th>
+                    <th class="sortable" data-column="modelo">Modelo</th>
+                    <th class="sortable" data-column="anoFab">Año Fab.</th>
+                    <th class="sortable" data-column="velMax">Vel. Max</th>
+                    <th class="sortable" data-column="alturaVuelo">Alt. Max</th>
+                    <th class="sortable" data-column="autonomia">Autonomía</th>
+                    <th class="sortable" data-column="cantPue">Cant. Pue</th>
+                    <th class="sortable" data-column="cantRue">Cant. Rue</th>
+                    <th class="sortable">Altura Vuelo</th>
+                    <th class="sortable">Tipo Tracción</th>
+                </tr>
+            </thead>
+            <tbody id="vehiculos-table">
+            </tbody>
+        </table>
     </div>
-    <button type="button" id="btn-calcular">Calcular Velocidad Promedio</button>
 
-    <h2>Vehículos Agregados</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Modelo</th>
-                <th>Año Fab.</th>
-                <th>Vel. Max</th>
-                <th>Alt. Max</th>
-                <th>Autonomía</th>
-                <th>Cant. Pue</th>
-                <th>Cant. Rue</th>
-                <th>Altura Vuelo</th>
-                <th>Tipo Tracción</th>
-            </tr>
-        </thead>
-        <tbody id="vehiculos-table">
-        </tbody>
-    </table>
+    <!-- Formulario ABM -->
+    <div id="form-abm" class="form-container hidden">
+        <h2>Formulario Datos</h2>
+        <div class="form-group">
+            <label for="id-abm">ID:</label>
+            <input type="text" id="id-abm" disabled>
+        </div>
+        <div class="form-group">
+            <label for="modelo-abm">Modelo:</label>
+            <input type="text" id="modelo-abm" required>
+        </div>
+        <div class="form-group">
+            <label for="anoFab-abm">Año Fabricación:</label>
+            <input type="number" id="anoFab-abm" required>
+        </div>
+        <div class="form-group">
+            <label for="velMax-abm">Velocidad Máxima:</label>
+            <input type="number" id="velMax-abm" required>
+        </div>
+
+        <div class="form-group">
+            <label for="tipo-abm">Tipo de Vehículo:</label>
+            <select id="tipo-abm" required>
+                <option value="" disabled selected>Selecciona tipo de vehículo</option>
+                <option value="aereo">Aéreo</option>
+                <option value="terrestre">Terrestre</option>
+            </select>
+        </div>
+    
+        <div class="form-group" id="alturaVuelo-abm" style="display: none;">
+            <label for="alturaVuelo">Altura de Vuelo:</label>
+            <input type="number" id="alturaVuelo" placeholder="Altura de vuelo (en metros)">
+        </div>
+
+        <div class="form-group" id="autonomia-abm" style="display: none;">
+            <label for="autonomia">Autonomía:</label>
+            <input type="number" id="autonomia" placeholder="Autonomía (en km)">
+        </div>
+
+                <div class="form-group" id="cantPue-abm" style="display: none;">
+            <label for="cantPue">Cantidad de Puertas:</label>
+            <input type="number" id="cantPue" placeholder="Cantidad de puertas">
+        </div>
+    
+        <div class="form-group" id="cantRue-abm" style="display: none;">
+            <label for="cantRue">Cantidad de Ruedas:</label>
+            <input type="number" id="cantRue" placeholder="Cantidad de ruedas">
+        </div>
+    
+    
+        <div class="form-group" id="tipoTraccion-abm" style="display: none;">
+            <label for="tipoTraccion">Tipo de Tracción:</label>
+            <input type="text" id="tipoTraccion" placeholder="Tipo de tracción">
+        </div>
+    
+        <button type="button" id="btn-guardar-abm">Guardar</button>
+        <button type="button" id="btn-cancelar-abm">Cancelar</button>
+    </div>
 
     <script src="script.js"></script>
 </body>
 </html>
+
+
+

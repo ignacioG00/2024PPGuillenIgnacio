@@ -67,33 +67,6 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Estilos para la tabla */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden; /* Para que los bordes redondeados se apliquen correctamente */
-}
-
-th {
-    background-color: #007BFF;
-    color: white;
-    padding: 10px;
-    text-align: left;
-}
-
-td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    background-color: #f9f9f9;
-}
-
-tr:hover {
-    background-color: #f1f1f1; 
-}
-
 /* Estilos para pantalla pequeña */
 @media (max-width: 600px) {
     body {
@@ -104,4 +77,121 @@ tr:hover {
     input[type="number"] {
         width: 100%; /* Hacer que los inputs ocupen todo el ancho */
     }
+}
+
+.hidden {
+    display: none;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+
+
+button {
+    margin-right: 10px;
+}
+
+/* Estilo para los cuadros de formulario */
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    width: 80%;
+    max-width: 800px;
+}
+
+/* Estilo general */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e9ecef;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: #007bff;  /* Azul */
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+select {
+    padding: 5px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Estilo para la tabla de vehículos */
+#tabla-vehiculos {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden; /* Para ocultar bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#tabla-vehiculos thead {
+    background-color: #007bff; 
+    color: white; 
+}
+
+#tabla-vehiculos th, #tabla-vehiculos td {
+    padding: 12px; 
+    text-align: left; 
+    border-bottom: 1px solid #ddd; 
+}
+
+#tabla-vehiculos th {
+    cursor: pointer; 
+}
+
+#tabla-vehiculos tbody tr {
+    transition: background-color 0.3s; 
+}
+
+#tabla-vehiculos tbody tr:hover {
+    background-color: #f1f1f1; 
+}
+
+#tabla-vehiculos tbody td {
+    background-color: #fff; 
+}
+
+#tabla-vehiculos tbody tr:nth-child(even) td {
+    background-color: #f9f9f9; 
 }

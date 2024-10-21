@@ -1,4 +1,3 @@
-// Clase base Vehiculo
 class Vehiculo {
     constructor(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue) {
         this.id = id;
@@ -12,7 +11,6 @@ class Vehiculo {
     }
 }
 
-// Clase derivada Aereo
 class Aereo extends Vehiculo {
     constructor(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue, alturaVuelo) {
         super(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue);
@@ -20,7 +18,6 @@ class Aereo extends Vehiculo {
     }
 }
 
-// Clase derivada Terrestre
 class Terrestre extends Vehiculo {
     constructor(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue, tipoTraccion) {
         super(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue);
@@ -28,10 +25,8 @@ class Terrestre extends Vehiculo {
     }
 }
 
-// Array para almacenar los vehículos
 let vehiculos = [];
 
-// Función para precargar vehículos
 function precargarVehiculos() {
     const vehiculosPrecargados = [
         new Aereo("14", "Boeing 747", 1990, 988, 13, 13450, 0, 2, 10000),
@@ -39,154 +34,257 @@ function precargarVehiculos() {
         new Aereo("67", "Boeing CH-47", 1962, 302, 6, 1200, 0, 2, 2000),
         new Terrestre("666", "Ferrari F100", 1998, 400, null, null, 2, 4, "Delantera"),
     ];
-
-    vehiculos = vehiculosPrecargados; 
-    actualizarTabla(vehiculos); 
+    vehiculos = vehiculosPrecargados;
+    actualizarTabla(vehiculos);
 }
 
-// Función para agregar un nuevo vehículo
-function agregarVehiculo() {
-    const id = document.getElementById('id').value;
-    const modelo = document.getElementById('modelo').value;
-    const anoFab = document.getElementById('anoFab').value;
-    const velMax = document.getElementById('velMax').value;
-    const altMax = document.getElementById('altMax').value;
-    const autonomia = document.getElementById('autonomia').value;
-    const cantPue = document.getElementById('cantPue').value;
-    const cantRue = document.getElementById('cantRue').value;
-    const tipo = document.querySelector('input[name="tipo"]:checked').value; // Obtener tipo de vehículo
+function validarFormulario() {
+    const modelo = document.getElementById('modelo-abm').value.trim();
+    const anoFab = parseInt(document.getElementById('anoFab-abm').value);
+    const velMax = parseInt(document.getElementById('velMax-abm').value);
+    const tipo = document.getElementById('tipo-abm').value;
+    const alturaVuelo = parseInt(document.getElementById('alturaVuelo-abm').value);
+    const autonomia = parseInt(document.getElementById('autonomia-abm').value);
+    const cantRuedas = parseInt(document.getElementById('cantRue-abm').value);
+    const cantPuertas = parseInt(document.getElementById('cantPue-abm').value);
 
-    let nuevoVehiculo;
-
-    // Crear un nuevo objeto de vehículo según su tipo
-    if (tipo === 'aereo') {
-        const alturaVuelo = prompt("Ingrese la altura de vuelo:");
-        nuevoVehiculo = new Aereo(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue, alturaVuelo);
-    } else if (tipo === 'terrestre') {
-        const tipoTraccion = prompt("Ingrese el tipo de tracción:");
-        nuevoVehiculo = new Terrestre(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue, tipoTraccion);
+    if (!modelo) {
+        alert("El modelo no puede estar vacío.");
+        return false;
     }
 
-    vehiculos.push(nuevoVehiculo);
-    actualizarTabla(vehiculos); 
-    limpiarFormulario();
-}
+    if (anoFab <= 1885) {
+        alert("El año de fabricación debe ser mayor a 1885.");
+        return false;
+    }
 
-// Función para modificar un vehículo existente
-function modificarVehiculo() {
-    const id = prompt("Ingrese el ID del vehículo a modificar:");
-    const vehiculo = vehiculos.find(v => v.id === id);
+    if (velMax <= 0) {
+        alert("La velocidad máxima debe ser mayor a 0.");
+        return false;
+    }
 
-    if (vehiculo) {
-        const modelo = prompt("Ingrese el nuevo modelo:", vehiculo.modelo);
-        const anoFab = prompt("Ingrese el nuevo año de fabricación:", vehiculo.anoFab);
-        const velMax = prompt("Ingrese la nueva velocidad máxima:", vehiculo.velMax);
-        const altMax = prompt("Ingrese la nueva altura máxima:", vehiculo.altMax);
-        const autonomia = prompt("Ingrese la nueva autonomía:", vehiculo.autonomia);
-        const cantPue = prompt("Ingrese la nueva cantidad de puertas:", vehiculo.cantPue);
-        const cantRue = prompt("Ingrese la nueva cantidad de ruedas:", vehiculo.cantRue);
+    if (tipo === 'Aéreo') {
+        if (alturaVuelo <= 0) {
+            alert("La altura de vuelo debe ser mayor a 0.");
+            return false;
+        }
+        if (autonomia <= 0) {
+            alert("La autonomía debe ser mayor a 0.");
+            return false;
+        }
+    }
+
+    if (tipo === 'Terrestre') {
         
-        // Actualizar las propiedades del vehículo
-        vehiculo.modelo = modelo;
-        vehiculo.anoFab = anoFab;
-        vehiculo.velMax = velMax;
-        vehiculo.altMax = altMax;
-        vehiculo.autonomia = autonomia;
-        vehiculo.cantPue = cantPue;
-        vehiculo.cantRue = cantRue;
+        if (cantRuedas <= 0) {
 
-        alert("Vehículo modificado con éxito.");
-        actualizarTabla(vehiculos); 
+            alert("La cantidad de ruedas debe ser mayor a 0.");
+            return false;
+        }
+        if (cantPuertas < 0) {
+            alert("La cantidad de puertas no puede ser menor a 0.");
+            return false;
+        }
+    }
+
+    return true; 
+}
+
+function agregarVehiculo() {
+    mostrarABM();
+    limpiarFormularioABM();
+}
+
+function modificarVehiculo(id) {
+    const vehiculo = vehiculos.find(v => v.id === id);
+    mostrarABM();
+    if (vehiculo) {
+        cargarFormularioABM(vehiculo);
     } else {
-        alert("Vehículo no encontrado.");
+        console.error('Vehículo no encontrado con ID:', id);
     }
 }
 
-// Función para eliminar un vehículo existente
-function eliminarVehiculo() {
-    const id = prompt("Ingrese el ID del vehículo a eliminar:");
-    const index = vehiculos.findIndex(v => v.id === id);
+function eliminarVehiculo(id) {
+    vehiculos = vehiculos.filter(v => v.id !== id);
+    actualizarTabla(vehiculos);
+}
 
-    if (index !== -1) {
-        vehiculos.splice(index, 1); // Eliminar el vehículo del array
-        alert("Vehículo eliminado con éxito.");
-        actualizarTabla(vehiculos); 
-    } else {
-        alert("Vehículo no encontrado.");
+function guardarVehiculo() {
+    const id = document.getElementById('id-abm').value || generarID();
+    const modelo = document.getElementById('modelo-abm').value;
+    const anoFab = document.getElementById('anoFab-abm').value;
+    const velMax = document.getElementById('velMax-abm').value;
+    const altMax = document.getElementById('alturaVuelo-abm').value;
+    const autonomia = document.getElementById('autonomia').value; 
+    const cantPue = document.getElementById('cantPue').value; 
+    const cantRue = document.getElementById('cantRue').value; 
+    const tipo = document.getElementById('tipo-abm').value;
+    
+    let vehiculoExistente = vehiculos.find(v => v.id === id);
+
+    if (!validarFormulario()) {
+        return;
     }
+
+    if (vehiculoExistente) {
+        vehiculos = vehiculos.map(v => {
+            if (v.id === id) {
+                v.modelo = modelo;
+                v.anoFab = anoFab;
+                v.velMax = velMax;
+                v.altMax = altMax || null;
+                v.autonomia = autonomia || null;
+                v.cantPue = cantPue;
+                v.cantRue = cantRue;
+                if (v instanceof Aereo) {
+                    v.alturaVuelo = document.getElementById('alturaVuelo').value; 
+                } else if (v instanceof Terrestre) {
+                    v.tipoTraccion = document.getElementById('tipoTraccion').value; 
+                }
+            }
+            return v;
+        });
+    } else {
+        // Alta de un nuevo vehículo
+        let nuevoVehiculo;
+        if (tipo === 'aereo') {
+            const alturaVuelo = document.getElementById('alturaVuelo').value; 
+            nuevoVehiculo = new Aereo(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue, alturaVuelo);
+        } else {
+            const tipoTraccion = document.getElementById('tipoTraccion').value; 
+            nuevoVehiculo = new Terrestre(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue, tipoTraccion);
+        }
+        vehiculos.push(nuevoVehiculo);
+    }
+
+    actualizarTabla(vehiculos);
+    ocultarABM();
 }
 
-// Función para limpiar los campos del formulario
-function limpiarFormulario() {
-    document.getElementById('id').value = '';
-    document.getElementById('modelo').value = '';
-    document.getElementById('anoFab').value = '';
-    document.getElementById('velMax').value = '';
-    document.getElementById('altMax').value = '';
-    document.getElementById('autonomia').value = '';
-    document.getElementById('cantPue').value = '';
-    document.getElementById('cantRue').value = '';
-    document.querySelector('input[name="tipo"]:checked').checked = false; 
-}
-
-// Función para actualizar la tabla con los vehículos
 function actualizarTabla(vehiculosAMostrar) {
     const tableBody = document.getElementById('vehiculos-table');
-    tableBody.innerHTML = ''; // Limpiar el contenido de la tabla antes de agregar nuevas filas
-
-    // Recorrer el array de vehículos y agregarlos a la tabla
+    tableBody.innerHTML = '';
     vehiculosAMostrar.forEach(vehiculo => {
         const row = document.createElement('tr');
-        
         row.innerHTML = `
-            <td class="col-id">${vehiculo.id}</td>
-            <td class="col-modelo">${vehiculo.modelo}</td>
-            <td class="col-anoFab">${vehiculo.anoFab}</td>
-            <td class="col-velMax">${vehiculo.velMax}</td>
-            <td class="col-altMax">${vehiculo.altMax || '-'}</td>
-            <td class="col-autonomia">${vehiculo.autonomia || '-'}</td>
-            <td class="col-cantPue">${vehiculo.cantPue}</td>
-            <td class="col-cantRue">${vehiculo.cantRue}</td>
-            ${vehiculo instanceof Aereo ? `<td class="col-alturaVuelo">${vehiculo.alturaVuelo}</td>` : '<td>-</td>'}
-            ${vehiculo instanceof Terrestre ? `<td class="col-tipoTraccion">${vehiculo.tipoTraccion}</td>` : '<td>-</td>'}
+            <td>${vehiculo.id}</td>
+            <td>${vehiculo.modelo}</td>
+            <td>${vehiculo.anoFab}</td>
+            <td>${vehiculo.velMax}</td>
+            <td>${vehiculo.altMax || '-'}</td>
+            <td>${vehiculo.autonomia || '-'}</td>
+            <td>${vehiculo.cantPue}</td>
+            <td>${vehiculo.cantRue}</td>
+            <td>${vehiculo.alturaVuelo || '-'}</td>
+            <td>${vehiculo.tipoTraccion || '-'}</td>
+            <td><button onclick="modificarVehiculo('${vehiculo.id}')">Modificar</button></td>
+            <td><button onclick="eliminarVehiculo('${vehiculo.id}')">Eliminar</button></td>
         `;
-
         tableBody.appendChild(row);
     });
 }
 
-// Función para filtrar los vehículos según el tipo seleccionado
 function filtrarVehiculos() {
-    const tipoFiltro = document.getElementById('filtro').value;
+    const filtro = document.getElementById('filtro').value;
     let vehiculosFiltrados;
+    if (filtro === 'todos') {
+        vehiculosFiltrados = vehiculos;
+    } else if (filtro === 'aereo') {
+        vehiculosFiltrados = vehiculos.filter(v => v instanceof Aereo);
+    } else if (filtro === 'terrestre') {
+        vehiculosFiltrados = vehiculos.filter(v => v instanceof Terrestre);
+    }
+    actualizarTabla(vehiculosFiltrados);
+}
+function calcularVelocidadPromedio() {
+    const filtro = document.getElementById('filtro').value;
+    let vehiculosFiltrados = vehiculos;
 
-    if (tipoFiltro === 'todos') {
-        vehiculosFiltrados = vehiculos; // Mostrar todos
-    } else if (tipoFiltro === 'aereo') {
-        vehiculosFiltrados = vehiculos.filter(v => v instanceof Aereo); // Mostrar solo aéreos
-    } else if (tipoFiltro === 'terrestre') {
-        vehiculosFiltrados = vehiculos.filter(v => v instanceof Terrestre); // Mostrar solo terrestres
+    if (filtro !== 'todos') {
+        vehiculosFiltrados = vehiculos.filter(v => 
+            (filtro === 'aereo' && v instanceof Aereo) || 
+            (filtro === 'terrestre' && v instanceof Terrestre)
+        );
     }
 
-    actualizarTabla(vehiculosFiltrados); 
+    const totalVelocidad = vehiculosFiltrados.reduce((acc, v) => acc + Number(v.velMax), 0);
+    const promedio = vehiculosFiltrados.length ? (totalVelocidad / vehiculosFiltrados.length) : 0;
+
+    const promedioInput = document.getElementById('velocidad-promedio');
+    promedioInput.value = promedio.toFixed(2);
 }
 
-// Función para calcular la velocidad máxima promedio
-function calcularVelocidadPromedio() {
-    const totalVelocidad = vehiculos.reduce((acc, vehiculo) => acc + Number(vehiculo.velMax), 0);
-    const promedio = totalVelocidad / vehiculos.length || 0;
-    alert(`La velocidad máxima promedio es: ${promedio.toFixed(2)}`);
+function generarID() {
+    return (vehiculos.length + 1).toString();
 }
 
-// Event listeners
+function actualizarFormularioABM() {
+    const tipoVehiculo = document.getElementById('tipo-abm').value;
+    
+    const tipoTraccionField = document.getElementById('tipoTraccion-abm');
+    const cantPueField = document.getElementById('cantPue-abm');
+    const cantRueField = document.getElementById('cantRue-abm');
+    const alturaVueloField = document.getElementById('alturaVuelo-abm');
+    const autonomiaField = document.getElementById('autonomia-abm');
+
+    if (tipoVehiculo === 'aereo') {
+        alturaVueloField.style.display = 'block'; 
+        autonomiaField.style.display = 'block'; 
+        tipoTraccionField.style.display = 'none'; 
+        cantPueField.style.display = 'none'; 
+        cantRueField.style.display = 'none'; 
+    } else if (tipoVehiculo === 'terrestre') {
+        alturaVueloField.style.display = 'none'; 
+        autonomiaField.style.display = 'none'; 
+        tipoTraccionField.style.display = 'block'; 
+        cantPueField.style.display = 'block'; 
+        cantRueField.style.display = 'block'; 
+    }
+}
+
+function mostrarABM() {
+    document.getElementById('form-abm').style.display = 'block';
+    document.getElementById('form-datos').style.display = 'none';
+}
+
+function ocultarABM() {
+    document.getElementById('form-abm').style.display = 'none';
+    document.getElementById('form-datos').style.display = 'block';
+}
+
+function limpiarFormularioABM() {
+    document.getElementById('id-abm').value = '';
+    document.getElementById('modelo-abm').value = '';
+    document.getElementById('anoFab-abm').value = '';
+    document.getElementById('velMax-abm').value = '';
+    document.getElementById('tipo-abm').value = ''; 
+    actualizarFormularioABM(); 
+}
+
+function cargarFormularioABM(vehiculo) {
+    document.getElementById('id-abm').value = vehiculo.id;
+    document.getElementById('modelo-abm').value = vehiculo.modelo;
+    document.getElementById('anoFab-abm').value = vehiculo.anoFab;
+    document.getElementById('velMax-abm').value = vehiculo.velMax;
+
+    if (vehiculo instanceof Aereo) {
+        document.getElementById('tipo-abm').value = 'aereo';
+        document.getElementById('alturaVuelo-abm').value = vehiculo.alturaVuelo;
+        document.getElementById('autonomia-abm').value = vehiculo.autonomia; 
+    } else {
+        document.getElementById('tipo-abm').value = 'terrestre';
+        document.getElementById('tipoTraccion-abm').value = vehiculo.tipoTraccion;
+        document.getElementById('cantPue-abm').value = vehiculo.cantPue;
+        document.getElementById('cantRue-abm').value = vehiculo.cantRue;
+    }
+}
 document.getElementById('btn-agregar').addEventListener('click', agregarVehiculo);
-document.getElementById('btn-modificar').addEventListener('click', modificarVehiculo);
-document.getElementById('btn-eliminar').addEventListener('click', eliminarVehiculo);
+document.getElementById('btn-guardar-abm').addEventListener('click', guardarVehiculo);
+document.getElementById('btn-cancelar-abm').addEventListener('click', ocultarABM);
 document.getElementById('filtro').addEventListener('change', filtrarVehiculos);
 document.getElementById('btn-calcular').addEventListener('click', calcularVelocidadPromedio);
+document.getElementById('tipo-abm').addEventListener('change', actualizarFormularioABM);
 
-// Precargar los vehículos al cargar la página
-window.onload = () => {
-    precargarVehiculos();
-};
+precargarVehiculos();
 
