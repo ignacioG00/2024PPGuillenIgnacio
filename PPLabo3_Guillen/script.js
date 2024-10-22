@@ -1,245 +1,271 @@
-class Vehiculo {
-    constructor(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue) {
+class Persona {
+    constructor(id, nombre, apellido, edad) {
+        if (!id || !nombre || !apellido || edad <= 15) {
+            throw new Error("Datos inválidos para Persona.");
+        }
         this.id = id;
-        this.modelo = modelo;
-        this.anoFab = anoFab;
-        this.velMax = velMax;
-        this.altMax = altMax;
-        this.autonomia = autonomia;
-        this.cantPue = cantPue;
-        this.cantRue = cantRue;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.edad = edad;
     }
 }
 
-class Aereo extends Vehiculo {
-    constructor(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue, alturaVuelo) {
-        super(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue);
-        this.alturaVuelo = alturaVuelo; 
+// Clase derivada Futbolista
+class Futbolista extends Persona {
+    constructor(id, nombre, apellido, edad, equipo, posicion, cantGoles) {
+        super(id, nombre, apellido, edad);
+        if (!equipo || !posicion || cantGoles <= 1) {
+            throw new Error("Datos inválidos para Futbolista.");
+        }
+        this.equipo = equipo;
+        this.posicion = posicion;
+        this.cantGoles = cantGoles;
     }
 }
 
-class Terrestre extends Vehiculo {
-    constructor(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue, tipoTraccion) {
-        super(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue);
-        this.tipoTraccion = tipoTraccion; 
+// Clase derivada Profesional
+class Profesional extends Persona {
+    constructor(id, nombre, apellido, edad, titulo, facultad, añoGraduacion) {
+        super(id, nombre, apellido, edad);
+        if (!titulo || !facultad || añoGraduacion <= 1950) {
+            throw new Error("Datos inválidos para Profesional.");
+        }
+        this.titulo = titulo;
+        this.facultad = facultad;
+        this.añoGraduacion = añoGraduacion;
     }
 }
 
-let vehiculos = [];
+let ordenAscendente = true; 
+let personas = [];
 
-function precargarVehiculos() {
-    const vehiculosPrecargados = [
-        new Aereo("14", "Boeing 747", 1990, 988, 13, 13450, 0, 2, 10000),
-        new Terrestre("51", "Dodge Viper", 1991, 266, null, null, 2, 4, "Trasera"),
-        new Aereo("67", "Boeing CH-47", 1962, 302, 6, 1200, 0, 2, 2000),
-        new Terrestre("666", "Ferrari F100", 1998, 400, null, null, 2, 4, "Delantera"),
+function precargarPersonas() {
+    const personasPrecargadas = [
+        new Futbolista(1, "Lionel", "Messi", 36, "Inter Miami", "Delantero", 800),
+        new Profesional(2, "Ana", "Gómez", 40, "Ingeniera Civil", "UBA", 2005),
+        new Futbolista(3, "Cristiano", "Ronaldo", 38, "Al Nassr", "Delantero", 700),
+        new Profesional(4, "Carlos", "Pérez", 45, "Abogado", "UNLP", 1998)
     ];
-    vehiculos = vehiculosPrecargados;
-    actualizarTabla(vehiculos);
+    personas = personasPrecargadas;
+    actualizarTabla(personas);
 }
 
-function validarFormulario() {
-    const modelo = document.getElementById('modelo-abm').value.trim();
-    const anoFab = parseInt(document.getElementById('anoFab-abm').value);
-    const velMax = parseInt(document.getElementById('velMax-abm').value);
-    const tipo = document.getElementById('tipo-abm').value;
-    const alturaVuelo = parseInt(document.getElementById('alturaVuelo-abm').value);
-    const autonomia = parseInt(document.getElementById('autonomia-abm').value);
-    const cantRuedas = parseInt(document.getElementById('cantRue-abm').value);
-    const cantPuertas = parseInt(document.getElementById('cantPue-abm').value);
+document.addEventListener("DOMContentLoaded", () => {
+    precargarPersonas();
+});
 
-    if (!modelo) {
-        alert("El modelo no puede estar vacío.");
+function validarFormularioPersona() {
+    const id = document.getElementById('id-abm').value.trim();
+    const nombre = document.getElementById('nombre-abm').value.trim();
+    const apellido = document.getElementById('apellido-abm').value.trim();
+    const edad = parseInt(document.getElementById('edad-abm').value);
+    const equipo = document.getElementById('equipo-abm')?.value.trim();
+    const posicion = document.getElementById('posicion-abm')?.value.trim();
+    const cantGoles = parseInt(document.getElementById('cantGoles-abm')?.value);
+    const titulo = document.getElementById('titulo-abm')?.value.trim();
+    const facultad = document.getElementById('facultad-abm')?.value.trim();
+    const añoGraduacion = parseInt(document.getElementById('añoGraduacion-abm')?.value);
+
+    if (!id || isNaN(id) || id <= 0) {
+        alert("El ID debe ser un número válido y mayor que 0.");
         return false;
     }
 
-    if (anoFab <= 1885) {
-        alert("El año de fabricación debe ser mayor a 1885.");
+    if (!nombre) {
+        alert("El nombre no puede estar vacío.");
         return false;
     }
 
-    if (velMax <= 0) {
-        alert("La velocidad máxima debe ser mayor a 0.");
+    if (!apellido) {
+        alert("El apellido no puede estar vacío.");
         return false;
     }
 
-    if (tipo === 'Aéreo') {
-        if (alturaVuelo <= 0) {
-            alert("La altura de vuelo debe ser mayor a 0.");
-            return false;
-        }
-        if (autonomia <= 0) {
-            alert("La autonomía debe ser mayor a 0.");
-            return false;
-        }
+    if (isNaN(edad) || edad <= 15) {
+        alert("La edad debe ser un número mayor que 15.");
+        return false;
     }
 
-    if (tipo === 'Terrestre') {
-        
-        if (cantRuedas <= 0) {
+    if (equipo && posicion && (isNaN(cantGoles) || cantGoles <= 1)) {
+        alert("La cantidad de goles debe ser un número mayor a 1 para un futbolista.");
+        return false;
+    }
 
-            alert("La cantidad de ruedas debe ser mayor a 0.");
-            return false;
-        }
-        if (cantPuertas < 0) {
-            alert("La cantidad de puertas no puede ser menor a 0.");
-            return false;
-        }
+    if (titulo && facultad && (isNaN(añoGraduacion) || añoGraduacion <= 1950)) {
+        alert("El año de graduación debe ser un número mayor a 1950 para un profesional.");
+        return false;
     }
 
     return true; 
 }
 
-function agregarVehiculo() {
+function agregarPersona() {
     mostrarABM();
     limpiarFormularioABM();
 }
 
-function modificarVehiculo(id) {
-    const vehiculo = vehiculos.find(v => v.id === id);
-    mostrarABM();
-    if (vehiculo) {
-        cargarFormularioABM(vehiculo);
+function modificarPersona(id) {
+    const persona = personas.find(p => p.id == id);
+    if (persona) {
+        cargarFormularioABM(persona); 
+        mostrarABM();
     } else {
-        console.error('Vehículo no encontrado con ID:', id);
+        console.error('Persona no encontrada con ID:', id);
     }
 }
 
-function eliminarVehiculo(id) {
-    vehiculos = vehiculos.filter(v => v.id !== id);
-    actualizarTabla(vehiculos);
+function eliminarPersona(id) {
+    personas = personas.filter(p => p.id != id); 
+    actualizarTabla(personas); 
 }
 
-function guardarVehiculo() {
-    const id = document.getElementById('id-abm').value || generarID();
-    const modelo = document.getElementById('modelo-abm').value;
-    const anoFab = document.getElementById('anoFab-abm').value;
-    const velMax = document.getElementById('velMax-abm').value;
-    const altMax = document.getElementById('alturaVuelo-abm').value;
-    const autonomia = document.getElementById('autonomia').value; 
-    const cantPue = document.getElementById('cantPue').value; 
-    const cantRue = document.getElementById('cantRue').value; 
+function guardarPersona() {
+    const id = document.getElementById('id-abm').value.trim();
+    const nombre = document.getElementById('nombre-abm').value.trim();
+    const apellido = document.getElementById('apellido-abm').value.trim();
+    const edad = parseInt(document.getElementById('edad-abm').value.trim());
     const tipo = document.getElementById('tipo-abm').value;
-    
-    let vehiculoExistente = vehiculos.find(v => v.id === id);
 
-    if (!validarFormulario()) {
+    let nuevaPersona;
+
+    if (!validarFormularioPersona()) {
         return;
     }
 
-    if (vehiculoExistente) {
-        vehiculos = vehiculos.map(v => {
-            if (v.id === id) {
-                v.modelo = modelo;
-                v.anoFab = anoFab;
-                v.velMax = velMax;
-                v.altMax = altMax || null;
-                v.autonomia = autonomia || null;
-                v.cantPue = cantPue;
-                v.cantRue = cantRue;
-                if (v instanceof Aereo) {
-                    v.alturaVuelo = document.getElementById('alturaVuelo').value; 
-                } else if (v instanceof Terrestre) {
-                    v.tipoTraccion = document.getElementById('tipoTraccion').value; 
-                }
-            }
-            return v;
-        });
-    } else {
-        // Alta de un nuevo vehículo
-        let nuevoVehiculo;
-        if (tipo === 'aereo') {
-            const alturaVuelo = document.getElementById('alturaVuelo').value; 
-            nuevoVehiculo = new Aereo(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue, alturaVuelo);
-        } else {
-            const tipoTraccion = document.getElementById('tipoTraccion').value; 
-            nuevoVehiculo = new Terrestre(id, modelo, anoFab, velMax, altMax, autonomia, cantPue, cantRue, tipoTraccion);
-        }
-        vehiculos.push(nuevoVehiculo);
+    if (tipo === 'futbolista') {
+        const equipo = document.getElementById('equipo-abm').value.trim();
+        const posicion = document.getElementById('posicion-abm').value.trim();
+        const cantGoles = parseInt(document.getElementById('cantGoles-abm').value.trim());
+
+        nuevaPersona = new Futbolista(id, nombre, apellido, edad, equipo, posicion, cantGoles);
+    } else if (tipo === 'profesional') {
+        const titulo = document.getElementById('titulo-abm').value.trim();
+        const facultad = document.getElementById('facultad-abm').value.trim();
+        const añoGraduacion = parseInt(document.getElementById('añoGraduacion-abm').value.trim());
+
+        nuevaPersona = new Profesional(id, nombre, apellido, edad, titulo, facultad, añoGraduacion);
     }
 
-    actualizarTabla(vehiculos);
+    const index = personas.findIndex(p => p.id == id);
+    if (index !== -1) {
+        personas[index] = nuevaPersona; 
+    } else {
+        personas.push(nuevaPersona); 
+    }
+
     ocultarABM();
+    limpiarFormularioABM();
+    actualizarTabla(personas); 
 }
 
-function actualizarTabla(vehiculosAMostrar) {
-    const tableBody = document.getElementById('vehiculos-table');
-    tableBody.innerHTML = '';
-    vehiculosAMostrar.forEach(vehiculo => {
+function actualizarTabla(personasAMostrar) {
+    const tableBody = document.getElementById('personas-table');
+    tableBody.innerHTML = ''; 
+
+    personasAMostrar.forEach(persona => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${vehiculo.id}</td>
-            <td>${vehiculo.modelo}</td>
-            <td>${vehiculo.anoFab}</td>
-            <td>${vehiculo.velMax}</td>
-            <td>${vehiculo.altMax || '-'}</td>
-            <td>${vehiculo.autonomia || '-'}</td>
-            <td>${vehiculo.cantPue}</td>
-            <td>${vehiculo.cantRue}</td>
-            <td>${vehiculo.alturaVuelo || '-'}</td>
-            <td>${vehiculo.tipoTraccion || '-'}</td>
-            <td><button onclick="modificarVehiculo('${vehiculo.id}')">Modificar</button></td>
-            <td><button onclick="eliminarVehiculo('${vehiculo.id}')">Eliminar</button></td>
+            <td>${persona.id}</td>
+            <td>${persona.nombre}</td>
+            <td>${persona.apellido}</td>
+            <td>${persona.edad}</td>
+            <td>${persona instanceof Futbolista ? persona.equipo : ''}</td>
+            <td>${persona instanceof Futbolista ? persona.posicion : ''}</td>
+            <td>${persona instanceof Futbolista ? persona.cantGoles : ''}</td>
+            <td>${persona instanceof Profesional ? persona.titulo : ''}</td>
+            <td>${persona instanceof Profesional ? persona.facultad : ''}</td>
+            <td>${persona instanceof Profesional ? persona.añoGraduacion : ''}</td>
+            <td>
+                <button onclick="modificarPersona(${persona.id})">Modificar</button>
+                <button onclick="eliminarPersona(${persona.id})">Eliminar</button>
+            </td>
         `;
         tableBody.appendChild(row);
     });
 }
 
-function filtrarVehiculos() {
+function filtrarPersonas() {
     const filtro = document.getElementById('filtro').value;
-    let vehiculosFiltrados;
+    let personasFiltradas;
+
     if (filtro === 'todos') {
-        vehiculosFiltrados = vehiculos;
-    } else if (filtro === 'aereo') {
-        vehiculosFiltrados = vehiculos.filter(v => v instanceof Aereo);
-    } else if (filtro === 'terrestre') {
-        vehiculosFiltrados = vehiculos.filter(v => v instanceof Terrestre);
-    }
-    actualizarTabla(vehiculosFiltrados);
-}
-function calcularVelocidadPromedio() {
-    const filtro = document.getElementById('filtro').value;
-    let vehiculosFiltrados = vehiculos;
-
-    if (filtro !== 'todos') {
-        vehiculosFiltrados = vehiculos.filter(v => 
-            (filtro === 'aereo' && v instanceof Aereo) || 
-            (filtro === 'terrestre' && v instanceof Terrestre)
-        );
+        personasFiltradas = personas;
+        mostrarTodosLosTitulos();
+    } else if (filtro === 'futbolistas') {
+        personasFiltradas = personas.filter(p => p instanceof Futbolista);
+        ocultarTitulosProfesionales();
+    } else if (filtro === 'profesionales') {
+        personasFiltradas = personas.filter(p => p instanceof Profesional);
+        mostrarTodosLosTitulos();
+        ocultarTitulosFutbolistas();
     }
 
-    const totalVelocidad = vehiculosFiltrados.reduce((acc, v) => acc + Number(v.velMax), 0);
-    const promedio = vehiculosFiltrados.length ? (totalVelocidad / vehiculosFiltrados.length) : 0;
-
-    const promedioInput = document.getElementById('velocidad-promedio');
-    promedioInput.value = promedio.toFixed(2);
+    actualizarTabla(personasFiltradas);
 }
 
-function generarID() {
-    return (vehiculos.length + 1).toString();
+document.getElementById('filtro').addEventListener('change', () => {
+    filtrarPersonas(); 
+});
+
+function ocultarTitulosFutbolistas() {
+    const titulosFutbolistas = [
+        'equipo',
+        'posicion',
+        'cantGoles'
+    ];
+    titulosFutbolistas.forEach(titulo => {
+        const th = document.querySelector(`th[data-column="${titulo}"]`);
+        if (th) {
+            th.style.visibility = 'hidden'; 
+        }
+    });
+}
+
+
+function ocultarTitulosProfesionales() {
+    const titulosProfesionales = [
+        'titulo',
+        'facultad',
+        'añoGraduacion'
+    ];
+    titulosProfesionales.forEach(titulo => {
+        const th = document.querySelector(`th[data-column="${titulo}"]`);
+        if (th) {
+            th.style.visibility = 'hidden'; 
+
+        }
+    });
+}
+
+function mostrarTodosLosTitulos() {
+    const titulos = [
+        'equipo',
+        'posicion',
+        'cantGoles',
+        'titulo',
+        'facultad',
+        'añoGraduacion'
+    ];
+    titulos.forEach(titulo => {
+        const th = document.querySelector(`th[data-column="${titulo}"]`);
+        if (th) {
+            th.style.visibility = 'visible'; 
+        }
+    });
 }
 
 function actualizarFormularioABM() {
-    const tipoVehiculo = document.getElementById('tipo-abm').value;
-    
-    const tipoTraccionField = document.getElementById('tipoTraccion-abm');
-    const cantPueField = document.getElementById('cantPue-abm');
-    const cantRueField = document.getElementById('cantRue-abm');
-    const alturaVueloField = document.getElementById('alturaVuelo-abm');
-    const autonomiaField = document.getElementById('autonomia-abm');
+    const tipoPersona = document.getElementById('tipo-abm').value;
 
-    if (tipoVehiculo === 'aereo') {
-        alturaVueloField.style.display = 'block'; 
-        autonomiaField.style.display = 'block'; 
-        tipoTraccionField.style.display = 'none'; 
-        cantPueField.style.display = 'none'; 
-        cantRueField.style.display = 'none'; 
-    } else if (tipoVehiculo === 'terrestre') {
-        alturaVueloField.style.display = 'none'; 
-        autonomiaField.style.display = 'none'; 
-        tipoTraccionField.style.display = 'block'; 
-        cantPueField.style.display = 'block'; 
-        cantRueField.style.display = 'block'; 
+    // Ocultar todos los campos
+    document.getElementById('futbolista-fields').style.display = 'none';
+    document.getElementById('profesional-fields').style.display = 'none';
+
+    // Mostrar campos según el tipo seleccionado
+    if (tipoPersona === 'futbolista') {
+        document.getElementById('futbolista-fields').style.display = 'block';
+    } else if (tipoPersona === 'profesional') {
+        document.getElementById('profesional-fields').style.display = 'block';
     }
 }
 
@@ -255,36 +281,94 @@ function ocultarABM() {
 
 function limpiarFormularioABM() {
     document.getElementById('id-abm').value = '';
-    document.getElementById('modelo-abm').value = '';
-    document.getElementById('anoFab-abm').value = '';
-    document.getElementById('velMax-abm').value = '';
+    document.getElementById('nombre-abm').value = '';
+    document.getElementById('apellido-abm').value = '';
+    document.getElementById('edad-abm').value = '';
     document.getElementById('tipo-abm').value = ''; 
     actualizarFormularioABM(); 
 }
 
-function cargarFormularioABM(vehiculo) {
-    document.getElementById('id-abm').value = vehiculo.id;
-    document.getElementById('modelo-abm').value = vehiculo.modelo;
-    document.getElementById('anoFab-abm').value = vehiculo.anoFab;
-    document.getElementById('velMax-abm').value = vehiculo.velMax;
+function cargarFormularioABM(persona) {
+    document.getElementById('id-abm').value = persona.id;
+    document.getElementById('nombre-abm').value = persona.nombre;
+    document.getElementById('apellido-abm').value = persona.apellido;
+    document.getElementById('edad-abm').value = persona.edad;
 
-    if (vehiculo instanceof Aereo) {
-        document.getElementById('tipo-abm').value = 'aereo';
-        document.getElementById('alturaVuelo-abm').value = vehiculo.alturaVuelo;
-        document.getElementById('autonomia-abm').value = vehiculo.autonomia; 
-    } else {
-        document.getElementById('tipo-abm').value = 'terrestre';
-        document.getElementById('tipoTraccion-abm').value = vehiculo.tipoTraccion;
-        document.getElementById('cantPue-abm').value = vehiculo.cantPue;
-        document.getElementById('cantRue-abm').value = vehiculo.cantRue;
+    if (persona instanceof Futbolista) {
+        document.getElementById('equipo-abm').value = persona.equipo;
+        document.getElementById('posicion-abm').value = persona.posicion;
+        document.getElementById('cantGoles-abm').value = persona.cantGoles;
+    } else if (persona instanceof Profesional) {
+        document.getElementById('titulo-abm').value = persona.titulo;
+        document.getElementById('facultad-abm').value = persona.facultad;
+        document.getElementById('añoGraduacion-abm').value = persona.añoGraduacion;
     }
-}
-document.getElementById('btn-agregar').addEventListener('click', agregarVehiculo);
-document.getElementById('btn-guardar-abm').addEventListener('click', guardarVehiculo);
-document.getElementById('btn-cancelar-abm').addEventListener('click', ocultarABM);
-document.getElementById('filtro').addEventListener('change', filtrarVehiculos);
-document.getElementById('btn-calcular').addEventListener('click', calcularVelocidadPromedio);
-document.getElementById('tipo-abm').addEventListener('change', actualizarFormularioABM);
 
-precargarVehiculos();
+    mostrarABM();
+}
+
+document.querySelectorAll('.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+        const column = th.getAttribute('data-column');
+        
+        let personasAMostrar;
+
+        const filtro = document.getElementById('filtro').value;
+        if (filtro === 'todos') {
+            personasAMostrar = personas; 
+        } else if (filtro === 'futbolistas') {
+            personasAMostrar = personas.filter(p => p instanceof Futbolista); 
+        } else if (filtro === 'profesionales') {
+            personasAMostrar = personas.filter(p => p instanceof Profesional); 
+        }
+
+        let personasOrdenadas = personasAMostrar
+            .map(p => p)
+            .filter(p => p[column] !== undefined)
+            .sort((a, b) => {
+                let aValue = a[column];
+                let bValue = b[column];
+
+                if (!isNaN(aValue) && !isNaN(bValue)) {
+                    return ordenAscendente ? aValue - bValue : bValue - aValue;
+                }
+
+                return ordenAscendente 
+                    ? aValue.toString().localeCompare(bValue.toString()) 
+                    : bValue.toString().localeCompare(aValue.toString());
+            });
+
+        ordenAscendente = !ordenAscendente; 
+
+        actualizarTabla(personasOrdenadas);
+    });
+});
+
+function calcularEdadProm() {
+    const filtro = document.getElementById('filtro').value;
+
+    let personasFiltradas;
+    if (filtro === 'todos') {
+        personasFiltradas = personas;
+    } else if (filtro === 'futbolistas') {
+        personasFiltradas = personas.filter(p => p instanceof Futbolista);
+    } else if (filtro === 'profesionales') {
+        personasFiltradas = personas.filter(p => p instanceof Profesional);
+    }
+
+    const edades = personasFiltradas.map(p => p.edad);
+    const edadPromedio = edades.length > 0 
+        ? edades.reduce((sum, edad) => sum + edad, 0) / edades.length 
+        : 0;
+
+    document.getElementById('edad-promedio').value = edadPromedio.toFixed(2);
+}
+
+document.getElementById('btn-calcular').addEventListener('click', calcularEdadProm);
+document.getElementById('tipo-abm').addEventListener('change', actualizarFormularioABM);
+document.getElementById('btn-agregar').addEventListener('click', agregarPersona);
+document.getElementById('btn-guardar-abm').addEventListener('click', guardarPersona);
+document.getElementById('btn-cancelar-abm').addEventListener('click', ocultarABM);
+document.getElementById('filtro').addEventListener('change', filtrarPersonas);
+
 

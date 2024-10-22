@@ -17,94 +17,87 @@
             <label for="filtro">Filtrar por:</label>
             <select id="filtro">
                 <option value="todos">Todos</option>
-                <option value="aereo">Aéreos</option>
-                <option value="terrestre">Terrestres</option>
+                <option value="futbolistas">Futbolistas</option>
+                <option value="profesionales">Profesionales</option>
             </select>
         </div>
         <div class="form-group">
-            <button type="button" id="btn-calcular">Calcular Velocidad Promedio</button>
-            <input type="text" id="velocidad-promedio" placeholder="Promedio" readonly>
+            <button type="button" id="btn-calcular">Calcular Edad Promedio</button>
+            <input type="text" id="edad-promedio" placeholder="Promedio" readonly>
         </div>
 
-        <h2>Vehículos Agregados</h2>
-        <table id="tabla-vehiculos">
+        <h2>Personas Agregadas</h2>
+        <table id="tabla-personas">
             <thead>
                 <tr>
                     <th class="sortable" data-column="id">ID</th>
-                    <th class="sortable" data-column="modelo">Modelo</th>
-                    <th class="sortable" data-column="anoFab">Año Fab.</th>
-                    <th class="sortable" data-column="velMax">Vel. Max</th>
-                    <th class="sortable" data-column="alturaVuelo">Alt. Max</th>
-                    <th class="sortable" data-column="autonomia">Autonomía</th>
-                    <th class="sortable" data-column="cantPue">Cant. Pue</th>
-                    <th class="sortable" data-column="cantRue">Cant. Rue</th>
-                    <th class="sortable">Altura Vuelo</th>
-                    <th class="sortable">Tipo Tracción</th>
+                    <th class="sortable" data-column="nombre">Nombre</th>
+                    <th class="sortable" data-column="apellido">Apellido</th>
+                    <th class="sortable" data-column="edad">Edad</th>
+                    <th class="sortable" data-column="equipo">Equipo</th>
+                    <th class="sortable" data-column="posicion">Posición</th>
+                    <th class="sortable" data-column="cantGoles">Cantidad de Goles</th>
+                    <th class="sortable" data-column="titulo">Título</th>
+                    <th class="sortable" data-column="facultad">Facultad</th>
+                    <th class="sortable" data-column="añoGraduacion">Año Graduación</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="vehiculos-table">
+            <tbody id="personas-table">
             </tbody>
         </table>
     </div>
 
-    <!-- Formulario ABM -->
-    <div id="form-abm" class="form-container hidden">
-        <h2>Formulario Datos</h2>
-        <div class="form-group">
+        <!-- Formulario ABM -->
+        <div id="form-abm" class="form-container hidden">
+            <h2>Agregar/Modificar Persona</h2>
+            
             <label for="id-abm">ID:</label>
-            <input type="text" id="id-abm" disabled>
-        </div>
-        <div class="form-group">
-            <label for="modelo-abm">Modelo:</label>
-            <input type="text" id="modelo-abm" required>
-        </div>
-        <div class="form-group">
-            <label for="anoFab-abm">Año Fabricación:</label>
-            <input type="number" id="anoFab-abm" required>
-        </div>
-        <div class="form-group">
-            <label for="velMax-abm">Velocidad Máxima:</label>
-            <input type="number" id="velMax-abm" required>
-        </div>
-
-        <div class="form-group">
-            <label for="tipo-abm">Tipo de Vehículo:</label>
-            <select id="tipo-abm" required>
-                <option value="" disabled selected>Selecciona tipo de vehículo</option>
-                <option value="aereo">Aéreo</option>
-                <option value="terrestre">Terrestre</option>
+            <input type="text" id="id-abm" placeholder="ID">
+            
+            <label for="nombre-abm">Nombre:</label>
+            <input type="text" id="nombre-abm" placeholder="Nombre">
+            
+            <label for="apellido-abm">Apellido:</label>
+            <input type="text" id="apellido-abm" placeholder="Apellido">
+            
+            <label for="edad-abm">Edad:</label>
+            <input type="number" id="edad-abm" placeholder="Edad">
+            
+            <label for="tipo-abm">Tipo:</label>
+            <select id="tipo-abm" onchange="actualizarFormularioABM()">
+                <option value="">Seleccionar tipo</option>
+                <option value="futbolista">Futbolista</option>
+                <option value="profesional">Profesional</option>
             </select>
+            
+            <!-- Campos específicos para Futbolista -->
+            <div id="futbolista-fields" style="display: none;">
+                <label for="equipo-abm">Equipo:</label>
+                <input type="text" id="equipo-abm" placeholder="Equipo">
+                
+                <label for="posicion-abm">Posición:</label>
+                <input type="text" id="posicion-abm" placeholder="Posición">
+                
+                <label for="cantGoles-abm">Cantidad de Goles:</label>
+                <input type="number" id="cantGoles-abm" placeholder="Cantidad de Goles">
+            </div>
+            
+            <!-- Campos específicos para Profesional -->
+            <div id="profesional-fields" style="display: none;">
+                <label for="titulo-abm">Título:</label>
+                <input type="text" id="titulo-abm" placeholder="Título">
+                
+                <label for="facultad-abm">Facultad:</label>
+                <input type="text" id="facultad-abm" placeholder="Facultad">
+                
+                <label for="añoGraduacion-abm">Año de Graduación:</label>
+                <input type="number" id="añoGraduacion-abm" placeholder="Año de Graduación">
+            </div>
+            
+            <button id="btn-guardar-abm">Guardar</button>
+            <button id="btn-cancelar-abm">Cancelar</button>
         </div>
-    
-        <div class="form-group" id="alturaVuelo-abm" style="display: none;">
-            <label for="alturaVuelo">Altura de Vuelo:</label>
-            <input type="number" id="alturaVuelo" placeholder="Altura de vuelo (en metros)">
-        </div>
-
-        <div class="form-group" id="autonomia-abm" style="display: none;">
-            <label for="autonomia">Autonomía:</label>
-            <input type="number" id="autonomia" placeholder="Autonomía (en km)">
-        </div>
-
-                <div class="form-group" id="cantPue-abm" style="display: none;">
-            <label for="cantPue">Cantidad de Puertas:</label>
-            <input type="number" id="cantPue" placeholder="Cantidad de puertas">
-        </div>
-    
-        <div class="form-group" id="cantRue-abm" style="display: none;">
-            <label for="cantRue">Cantidad de Ruedas:</label>
-            <input type="number" id="cantRue" placeholder="Cantidad de ruedas">
-        </div>
-    
-    
-        <div class="form-group" id="tipoTraccion-abm" style="display: none;">
-            <label for="tipoTraccion">Tipo de Tracción:</label>
-            <input type="text" id="tipoTraccion" placeholder="Tipo de tracción">
-        </div>
-    
-        <button type="button" id="btn-guardar-abm">Guardar</button>
-        <button type="button" id="btn-cancelar-abm">Cancelar</button>
-    </div>
 
     <script src="script.js"></script>
 </body>

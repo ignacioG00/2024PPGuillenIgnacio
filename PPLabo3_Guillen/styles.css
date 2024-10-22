@@ -75,7 +75,7 @@ button:hover {
 
     input[type="text"],
     input[type="number"] {
-        width: 100%; /* Hacer que los inputs ocupen todo el ancho */
+        width: 100%; 
     }
 }
 
@@ -93,7 +93,6 @@ button {
     margin-right: 10px;
 }
 
-/* Estilo para los cuadros de formulario */
 .form-container {
     background-color: #fff;
     padding: 20px;
@@ -113,7 +112,7 @@ body {
 }
 
 h1, h2 {
-    color: #007bff;  /* Azul */
+    color: #007bff;  
 }
 
 button {
@@ -161,7 +160,7 @@ select {
     border-collapse: collapse;
     margin: 20px 0;
     border-radius: 10px;
-    overflow: hidden; /* Para ocultar bordes redondeados */
+    overflow: hidden; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
