@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABM de Personas</title>
+    <link rel="stylesheet" href="estilo.css">
+  </head>
+  
+  <body>
+    <!-- HTML para el Formulario de Filtros y Tabla -->
+    <div class="form-filtros">
+      <h3>Form Datos</h3>
+      <label for="filtro">Filtrar por:</label>
+      <select id="filtro">
+        <option value="todos">Todos</option>
+        <option value="heroe">Heroes</option>
+        <option value="villano">Villanos</option>
+      </select>
+  
+      <div class="checkboxes">
+        <label><input type="checkbox" data-column="id" checked> ID</label>
+        <label><input type="checkbox" data-column="nombre" checked> Nombre</label>
+        <label><input type="checkbox" data-column="apellido" checked> Apellido</label>
+        <label><input type="checkbox" data-column="edad" checked> Edad</label>
+        <label><input type="checkbox" data-column="ciudad" checked> ciudad</label>
+        <label><input type="checkbox" data-column="alterEgo" checked> AlterEgo</label>
+        <label><input type="checkbox" data-column="publicado" checked> Publicado</label>
+        <label><input type="checkbox" data-column="titulo" checked> Título</label>
+        <label><input type="checkbox" data-column="robos" checked> Robos</label>
+        <label><input type="checkbox" data-column="asesinatos" checked> Asesinatos</label>
+      </div>
+  
+      <div class="form-promedio">
+        <label for="prom-vel-max">Promedio:</label>
+        <input type="text" id="prom-vel-max" readonly>
+        <button type="button" id="btn-calcular">Calcular</button>
+      </div>
+  
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>ciudad</th>
+            <th>AlterEgo</th>
+            <th>Publicado</th>
+            <th>Título</th>
+            <th>robos</th>
+            <th>Asesinatos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Filas de personas se generan dinámicamente -->
+        </tbody>
+      </table>
+  
+      <button type="button" id="btn-agregar-form-datos">Agregar</button>
+    </div>
+  
+    <!-- Formulario ABM -->
+    <div id="form-abm" class="form-abm" style="display: none;">
+      <h3>Form ABM</h3>
+    
+      <label for="tipoPersona">Tipo de Persona:</label>
+      <select id="tipoPersona">
+        <option value="default">-</option>
+        <option value="heroe">Heroe</option>
+        <option value="profesional">Villano</option>
+      </select>
+    
+      <label for="id">ID:</label>
+      <input type="text" id="id" disabled>
+    
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre">
+    
+      <label for="apellido">Apellido:</label>
+      <input type="text" id="apellido">
+    
+      <label for="edad">Edad:</label>
+      <input type="text" id="edad">
+    
+      <!-- Campos solo para Heroes -->
+      <div class="heroe-fields" style="display: none;">
+        <label for="ciudad">ciudad:</label>
+        <input type="text" id="ciudad">
+    
+        <label for="alterEgo">AlterEgo:</label>
+        <input type="text" id="alterEgo">
+    
+        <label for="publicado">Cantidad de Publicado:</label>
+        <input type="text" id="publicado" min="0">
+      </div>
+    
+      <!-- Campos solo para Profesionales -->
+      <div class="profesional-fields" style="display: none;">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo">
+    
+        <label for="robos">robos:</label>
+        <input type="text" id="robos">
+    
+        <label for="asesinatos">Asesinatos:</label>
+        <input type="text" id="asesinatos" min="1950">
+      </div>
+    
+      <div class="form-actions">
+        <button type="button" id="btn-agregar-abm">Agregar</button>
+        <button type="button" id="btn-modificar">Modificar</button>
+        <button type="button" id="btn-eliminar">Eliminar</button>
+        <button type="button" id="btn-cancelar">Cancelar</button>
+      </div>
+    </div>
+    
+  
+    <script type="module" src="script.js"></script>
+  </body>
+  
+  </html>
