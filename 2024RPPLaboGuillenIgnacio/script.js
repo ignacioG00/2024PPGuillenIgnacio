@@ -1,258 +1,433 @@
-let personas = JSON.parse('[{"id":1, "nombre":"Clark", "apellido":"Kent", "edad":45, "alterEgo":"Superman", "ciudad":"Metropolis", "publicado":2002},{"id":2, "nombre":"Bruce", "apellido":"Wayne", "edad":35, "alterEgo":"Batman", "ciudad":"Gotica", "publicado":2012},{"id":3, "nombre":"Bart", "apellido":"Alen", "edad":30, "alterEgo":"Flash", "ciudad":"Central", "publicado":2017},{"id":4, "nombre":"Lex", "apellido":"Luthor", "edad":18, "enemigo":"Superman", "robos":500, "asesinatos":7},{"id":5, "nombre":"Harvey", "apellido":"Dent", "edad":20, "enemigo":"Batman", "robos":750, "asesinatos":2},{"id":666, "nombre":"Celina", "apellido":"kyle", "edad":23, "enemigo":"Batman", "robos":25, "asesinatos":1}]');
-let personaEditando = null;
-
-function mostrarDatos() {
-    const tbody = document.querySelector("#tabla-personas tbody");
-    tbody.innerHTML = '';
-    document.getElementById("filter").value = "todos";
-
-    personas.forEach(p => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${p.id || '--'}</td>
-            <td>${p.nombre || '--'}</td>
-            <td>${p.apellido || '--'}</td>
-            <td>${p.edad || '--'}</td>
-            <td>${p.enemigo || '--'}</td>
-            <td>${p.asesinatos || '--'}</td>
-            <td>${p.robos || '--'}</td>
-            <td>${p.alterEgo || '--'}</td>
-            <td>${p.ciudad || '--'}</td>
-            <td>${p.publicado || '--'}</td>`;
-        row.ondblclick = () => mostrarABM(p);
-        tbody.appendChild(row);
-    });
-
-    mostrarColumnas();
-}
-
-function filtrarDatos() {
-    const filtro = document.getElementById("filter").value;
-    let filtrados = personas;
-
-    if (filtro === 'villanos') {
-        filtrados = personas.filter(p => p.enemigo);
-    } else if (filtro === 'heroes') {
-        filtrados = personas.filter(p => p.alterEgo);
+class Persona {
+    constructor(id, nombre, apellido, edad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.edad = edad;
     }
-
-    mostrarDatosFiltrados(filtrados);
-}
-
-function mostrarDatosFiltrados(lista) {
-    const tbody = document.querySelector("#tabla-personas tbody");
-    tbody.innerHTML = '';
-    lista.forEach(p => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${p.id || '--'}</td>
-            <td>${p.nombre || '--'}</td>
-            <td>${p.apellido || '--'}</td>
-            <td>${p.edad || '--'}</td>
-            <td>${p.enemigo || '--'}</td>
-            <td>${p.asesinatos || '--'}</td>
-            <td>${p.robos || '--'}</td>
-            <td>${p.alterEgo || '--'}</td>
-            <td>${p.ciudad || '--'}</td>
-            <td>${p.publicado || '--'}</td>`;
-        row.ondblclick = () => mostrarABM(p);
-        tbody.appendChild(row);
-    });
-
-    mostrarColumnas();
-}
-
-function calcularEdadPromedio() {
-    const filtro = document.getElementById("filter").value;
-    let filtrados = personas;
-    if (filtro === 'Heroe') {
-        filtrados = personas.filter(p => p.enemigo);
-    } else if (filtro === 'Villano') {
-        filtrados = personas.filter(p => p.alterEgo);
+    toString() {
+        return `Id: ${this.id} - Nombre: ${this.nombre} - Apellido: ${this.apellido} - Edad: ${this.edad}`; 
     }
-    const promedio = filtrados.reduce((acc, p) => acc + p.edad, 0) / filtrados.length;
-    document.getElementById("edad-promedio").value = `${promedio.toFixed(2)}`;
 }
 
-function mostrarABM(persona = {}) {
-    document.getElementById("form-datos").style.display = "none";
-    document.getElementById("form-abm").style.display = "block";
-    personaEditando = persona.id;
-    document.getElementById("id").value = persona.id || '';
-    document.getElementById("nombre").value = persona.nombre || '';
-    document.getElementById("apellido").value = persona.apellido || '';
-    document.getElementById("edad").value = persona.edad || '';
-    document.getElementById("enemigo").value = persona.enemigo || '';
-    document.getElementById("asesinatos").value = persona.asesinatos || '';
-    document.getElementById("robos").value = persona.robos != null ? persona.robos : 0;
-    document.getElementById("alterEgo").value = persona.alterEgo || '';
-    document.getElementById("ciudad").value = persona.ciudad || '';
-    document.getElementById("publicado").value = persona.publicado || '';
-
-    if (persona.enemigo) {
-        document.getElementById("tipo").value = 'tipo_villanos';
-    } else if (persona.alterEgo) {
-        document.getElementById("tipo").value = 'tipo_heroes';
-    } else {
-        document.getElementById("tipo").value = 'tipo_heroes';
+class Heroe extends Persona {
+    constructor(id, nombre, apellido, edad, alterEgo, ciudad, publicado) {
+        super(id, nombre, apellido, edad);
+        this.alterEgo = alterEgo;
+        this.ciudad = ciudad;
+        this.publicado = publicado;
     }
-
-    mostrarCamposPorTipo();
+    toString() {
+        return `${super.toString()} - AlterEgo: ${this.alterEgo} - Ciudad: ${this.ciudad} - Publicado: ${this.publicado}`;
+    }
 }
 
-function guardarPersona() {
-    const id = personaEditando || (personas.length ? Math.max(...personas.map(p => p.id)) + 1 : 1);
-    const nombre = document.getElementById("nombre").value;
-    const apellido = document.getElementById("apellido").value;
-    const edad = parseInt(document.getElementById("edad").value);
-    const tipo = document.getElementById("tipo").value;
-    const enemigo = document.getElementById("enemigo").value;
-    const asesinatos = document.getElementById("asesinatos").value;
-    const robos = parseInt(document.getElementById("robos").value) || 0;
-    const alterEgo = document.getElementById("alterEgo").value;
-    const ciudad = document.getElementById("ciudad").value;
-    const publicado = parseInt(document.getElementById("publicado").value) || null;
-    const existeJugador = personas.some(p => p.id === id);
-    
-    if (existeJugador) {
-        alert("La persona ingresada ya existe. Presione 'Modificar' para guardar los cambios.");
-        return;
+class Villano extends Persona {
+    constructor(id, nombre, apellido, edad, enemigo, robos, asesinatos) {
+        super(id, nombre, apellido, edad);
+        this.enemigo = enemigo;
+        this.robos = robos;
+        this.asesinatos = asesinatos;
     }
-
-    if (!nombre) {
-        alert("El campo 'Nombre' es requerido.");
-        return;
-    } else if (!apellido) {
-        alert("El campo 'Apellido' es requerido.");
-        return;
-    } else if (isNaN(edad)) {
-        alert("El campo 'Edad' es requerido.");
-        return;
-    } else if (tipo === 'tipo_heroes' && enemigo.trim() === '' && publicado < 1940) {
-        alert("Error en los campos de tipo heroe.");
-        return;
-    } else if (tipo === 'tipo_villanos' && alterEgo.trim() === '' && robos < 1 && asesinatos < 1) {
-        alert("Error en los campos de tipo villano.");
-        return;
+    toString() {
+        return `${super.toString()} - Enemigo: ${this.enemigo} - Robos: ${this.robos} - Asesinatos: ${this.asesinatos}`;
     }
-
-    const nuevaPersona = { id, nombre, apellido, edad, enemigo, asesinatos, robos, alterEgo, ciudad, publicado, tipo };
-    
-    if (personaEditando) {
-        personas = personas.map(p => p.id === personaEditando ? nuevaPersona : p);
-    } else {
-        personas.push(nuevaPersona);
-    }
-
-    cancelarABM();
-    mostrarDatos();
 }
+const personas = 
+`[{"id":1, "nombre":"Clark", "apellido":"Kent", "edad":45, "alterEgo":"Superman", "ciudad":"Metropolis",
+"publicado":2002},{"id":2, "nombre":"Bruce", "apellido":"Wayne", "edad":35, "alterEgo":"Batman", "ciudad":"Gotica",
+"publicado":2012},{"id":3, "nombre":"Bart", "apellido":"Alen", "edad":30, "alterEgo":"Flash", "ciudad":"Central",
+"publicado":2017},{"id":4, "nombre":"Lex", "apellido":"Luthor", "edad":18, "enemigo":"Superman", "robos":500,
+"asesinatos":7},{"id":5, "nombre":"Harvey", "apellido":"Dent", "edad":20, "enemigo":"Batman", "robos":750,
+"asesinatos":2},{"id":666, "nombre":"Celina", "apellido":"kyle", "edad":23, "enemigo":"Batman", "robos":25,
+"asesinatos":1}]`;
 
-function modificarPersona() {
-    const id = personaEditando;
-
-    if (!id) {
-        alert("La persona ingresada no existe. Presione 'Alta' para continuar.");
-        return;
-    }
-
-    const nombre = document.getElementById("nombre").value;
-    const apellido = document.getElementById("apellido").value;
-    const edad = parseInt(document.getElementById("edad").value);
-    const enemigo = document.getElementById("enemigo").value;
-    const asesinatos = document.getElementById("asesinatos").value;
-    const robos = parseInt(document.getElementById("robos").value) || 0;
-    const alterEgo = document.getElementById("alterEgo").value;
-    const ciudad = document.getElementById("ciudad").value;
-    const publicado = parseInt(document.getElementById("publicado").value) || null;
-    const tipo = document.getElementById("tipo").value;
-    const personaExistente = personas.find(p => p.id === id);
-
-    if (!personaExistente) {
-        alert("La persona ingresada no existe. Presione 'Alta' para continuar.");
-        return;
-    }
-
-    personaExistente.nombre = nombre;
-    personaExistente.apellido = apellido;
-    personaExistente.edad = edad;
-    personaExistente.enemigo = enemigo;
-    personaExistente.asesinatos = asesinatos;
-    personaExistente.robos = robos;
-    personaExistente.alterEgo = alterEgo;
-    personaExistente.ciudad = ciudad;
-    personaExistente.publicado = publicado;
-    personaExistente.tipo = tipo;
-
-    cancelarABM();
-    mostrarDatos();
-}
-
-function eliminarPersona() {
-    if (!personaEditando) {
-        cancelarABM();
-        return;
-    }
-
-    personas = personas.filter(p => p.id !== personaEditando);
-    personaEditando = null;
-
-    mostrarDatos();
-    cancelarABM();
-}
-
-function cancelarABM() {
-    document.getElementById("form-abm").style.display = "none";
-    document.getElementById("form-datos").style.display = "block";
-}
-
-function ordenarTabla(columna) {
-    personas.sort((a, b) => (a[columna] > b[columna]) ? 1 : -1);
-    mostrarDatos();
-}
-
-function mostrarColumnas() {
-    const checkboxes = document.querySelectorAll('[data-column]');
-    checkboxes.forEach(cb => {
-        const columnName = cb.dataset.column;
-        const columnIndex = Array.from(document.querySelectorAll("#tabla-personas th"))
-            .findIndex(th => th.getAttribute("onclick")?.includes(columnName));
-        if (columnIndex !== -1) {
-            const displayStyle = cb.checked ? '' : 'none';
-            document.querySelectorAll(`#tabla-personas th`)[columnIndex].style.display = displayStyle;
-            document.querySelectorAll(`#tabla-personas tbody tr`).forEach(row => {
-                if (row.cells[columnIndex]) {
-                    row.cells[columnIndex].style.display = displayStyle;
-                }
-            });
+function parsearArray(array) {
+    return JSON.parse(array).map((item) => {
+        if (item.alterEgo !== undefined) {
+            return new Heroe(item.id, item.nombre, item.apellido, item.edad, item.alterEgo, item.ciudad, item.publicado);
+        } else {
+            return new Villano(item.id, item.nombre, item.apellido, item.edad, item.enemigo, item.robos, item.asesinatos);
         }
     });
 }
 
-function mostrarCamposPorTipo() {
-    const tipo = document.getElementById("tipo").value;
-    const camposVillano = ['enemigo', 'asesinatos', 'robos'];
-    const camposHeroe = ['alterEgo', 'ciudad', 'publicado'];
+function mostrarDatos(personas) {
+    const tbody = document.querySelector("#tbodyrow");
+    tbody.innerHTML = '';
+    let valorCelda ="";
+    
+    personas.forEach((persona, index) => {
+        const row = document.createElement("tr");
+        row.setAttribute("id", `${index}`);
+        row.innerHTML = `
+            <td class="id">${persona.id}</td>
+            <td class="nombre">${persona.nombre}</td>
+            <td class="apellido">${persona.apellido}</td>
+            <td class="edad">${persona.edad}</td>
+            <td class="alterego">${persona.alterEgo !== undefined ? persona.alterEgo : "--"}</td>
+            <td class="ciudad">${persona.ciudad !== undefined ? persona.ciudad : "--"}</td>
+            <td class="publicado">${persona.publicado !== undefined ? persona.publicado : "--"}</td>
+            <td class="enemigo">${persona.enemigo !== undefined ? persona.enemigo : "--"}</td>
+            <td class="robos">${persona.robos !== undefined ? persona.robos : "--"}</td>
+            <td class="asesinatos">${persona.asesinatos !== undefined ? persona.asesinatos : "--"}</td>
+        `;
+        row.addEventListener("dblclick", () =>{
+            document.querySelectorAll("tr.selected").forEach(row => row.classList.remove("selected"));
+            row.classList.add("selected");
+            let indice = Number(row.id);
+            valorCelda = row.querySelector(".alterego").textContent;
+            let modificar = valorCelda == "--"? "villano": "heroe"
+            modificarPersona(indice, modificar, personas);
+        });
+        tbody.appendChild(row);
+    });
+    ocultarColumnasOcultas();
+    ordenarColumnas(personas);
+    eliminarPersona(personas);
+}
 
-    camposVillano.concat(camposHeroe).map(id => {
-        document.getElementById(id).style.display = 'inline-block';
-        document.querySelector(`label[for="${id}"]`).style.display = 'inline-block';
+function ocultarColumnasOcultas() {
+    const columnasOcultas = [];
+
+    document.querySelectorAll("th").forEach((th, index) => {
+        if (th.style.display === "none") {
+            columnasOcultas.push(index);
+        }
     });
 
-    if (tipo === 'tipo_heroes') {
-        camposHeroe.map(id => {
-            document.getElementById(id).style.display = 'none';
-            document.querySelector(`label[for="${id}"]`).style.display = 'none';
+    document.querySelectorAll("#tablaPersonas tbody tr").forEach(tr => {
+        columnasOcultas.forEach(index => {
+            tr.children[index].style.display = "none";
         });
-    } else if (tipo === 'tipo_villanos') {
-        camposVillano.map(id => {
-            document.getElementById(id).style.display = 'none';
-            document.querySelector(`label[for="${id}"]`).style.display = 'none';
+    });
+}
+
+function eliminarPersona(personas) {
+    document.getElementById("btnEliminar").onclick = () => {
+        const filaSeleccionada = document.querySelector("tr.selected");
+        
+        if (filaSeleccionada) 
+        {
+            const indice = Number(filaSeleccionada.id);
+            personas.splice(indice, 1);
+            mostrarDatos(personas);
+            visibilidadForm("block", "none");
+            limpiarFormulario();
+        }
+    };
+}
+
+function ordenarColumnas(personas) 
+{
+    document.querySelectorAll("th.ordenar").forEach(th => {
+        th.addEventListener("dblclick", function () {
+            const columna = th.getAttribute("data-column");
+
+            personas.sort((a, b) => {
+                let aValue = a[columna];
+                let bValue = b[columna];
+
+                if (aValue === undefined) aValue = 0; 
+                if (bValue === undefined) bValue = 0;
+
+                if (typeof aValue === "string") {
+                    return aValue.localeCompare(bValue);
+                } else {
+                    return aValue - bValue;
+                }
+            });
+            mostrarDatos(personas);
+        });
+    });
+}
+function modificarPersona(indice, tipoDePersona, personas)
+{
+    let persona = personas[indice];
+
+    ocultarDatosAbm("abmTipo", "none");
+    visibilidadForm("none", "block");
+    visibilidadBotones("none", "block", "block");
+ 
+    document.getElementById("txtNombre").value = persona.nombre;
+    document.getElementById("txtApellido").value = persona.apellido;
+    document.getElementById("txtEdad").value = persona.edad;
+
+    if(tipoDePersona == "villano")
+    {
+        ocultarDatosAbm("abmVillano", "block");
+        ocultarDatosAbm("abmHeroe", "none");
+        document.getElementById("txtEnemigo").value = persona.enemigo;
+        document.getElementById("txtRobos").value = persona.robos;
+        document.getElementById("txtAsesinatos").value = persona.asesinatos;
+    }
+    else if(tipoDePersona == "heroe")
+    {
+        ocultarDatosAbm("abmVillano", "none");
+        ocultarDatosAbm("abmHeroe", "block");
+        document.getElementById("txtAlterEgo").value = persona.alterEgo;
+        document.getElementById("txtCiudad").value = persona.ciudad;
+        document.getElementById("txtPublicado").value = persona.publicado; 
+    }
+    document.getElementById("btnModificar").onclick = ()=>
+        {
+
+            let nombre = document.getElementById("txtNombre").value; 
+            let apellido = document.getElementById("txtApellido").value;
+            let edad = document.getElementById("txtEdad").value;
+            
+            if(tipoDePersona == "villano")
+            {
+                let enemigo = document.getElementById("txtEnemigo").value;
+                let robos = document.getElementById("txtRobos").value;
+                let asesinatos = document.getElementById("txtAsesinatos").value;
+
+                if (!validarDatosVillano(nombre, apellido, edad, enemigo, robos, asesinatos)) 
+                {
+                    alert("Por favor, completa todos los campos correctamente.");
+                    return;
+                }
+                persona.enemigo = enemigo;
+                persona.robos = robos;
+                persona.asesinatos = asesinatos;
+            }
+            else if(tipoDePersona == "heroe")
+            {
+                let alterEgo = document.getElementById("txtAlterEgo").value;
+                let ciudad = document.getElementById("txtCiudad").value;
+                let publicado = document.getElementById("txtPublicado").value; 
+
+                if (!validarDatosHeroe(nombre, apellido, edad, alterEgo, ciudad, publicado)) 
+                {
+                    alert("Por favor, completa todos los campos correctamente.");
+                    return;
+                }
+                persona.alterEgo = alterEgo;
+                persona.ciudad = ciudad;
+                persona.publicado = publicado;
+            }
+            persona.nombre = nombre;
+            persona.apellido = apellido;
+            persona.edad = edad;
+
+            personas[indice] = persona;
+            mostrarDatos(personas);
+            visibilidadForm("block", "none");
+            limpiarFormulario();
+        }
+}
+
+function filtrarPorTipo(personas) 
+{
+    const selects = document.getElementById("tiposDePersona");
+    const botonPromedio = document.getElementById("btnCalcular");
+    const textPromedio = document.getElementById("txtPromedio");
+    textPromedio.value =0;
+    let personasFiltrados = personas;
+    
+    mostrarColumnas();
+    
+    selects.addEventListener("change", ()=>{
+        textPromedio.value =0;
+        
+        if (selects.value == "Heroe") 
+        {
+            personasFiltrados = personas.filter(persona => persona instanceof Heroe);
+        } 
+        else if (selects.value == "Villano") 
+        {
+            personasFiltrados = personas.filter(persona => persona instanceof Villano);
+        } 
+        else
+        {
+            personasFiltrados = personas;
+        }
+            mostrarDatos(personasFiltrados);
+        });
+        botonPromedio.addEventListener("click", () => {
+            const totalEdad = personasFiltrados.reduce((sum, v) => sum + parseFloat(v.edad), 0);
+            const promedioEdad = personasFiltrados.length ? (totalEdad / personasFiltrados.length).toFixed(2) : 0;
+            textPromedio.value = promedioEdad;
+        });
+        return personasFiltrados;
+}
+
+function ocultarColumnasOcultas() {
+    const columnasOcultas = [];
+    document.querySelectorAll("th").forEach((th, index) => {
+        if (th.style.display === "none") {
+            columnasOcultas.push(index);
+        }
+    });
+    
+    document.querySelectorAll("#tbodyrow tr").forEach(tr => {
+        columnasOcultas.forEach(index => {
+            tr.children[index].style.display = "none";
+        });
+    });
+}
+
+function mostrarColumnas() {
+    const groupCheck = document.getElementsByName("checkTable");
+    
+    for(let i=0; i<groupCheck.length;i++) {
+        groupCheck[i].checked = true;
+        
+        groupCheck[i].addEventListener("change",() => {
+            let labelCheck = document.querySelector(`label[for='${groupCheck[i].id}']`);
+            let columnaName = labelCheck.innerHTML.toLowerCase().replace(/ /g, '');
+            let columna = document.getElementsByClassName(columnaName);
+            
+            for(let j=0; j<columna.length;j++) {  
+                if(groupCheck[i].checked) {
+                    columna[j].style.display ='table-cell';
+                } else {
+                    columna[j].style.display = 'none';
+                }  
+            }
         });
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    mostrarDatos();
-    filtrarDatos();
-});
+function validarDatosVillano(nombre, apellido, edad, opcion1, opcion2, opcion3) {
+    if (!nombre || !apellido || !opcion1 || !opcion2 || !opcion3) return false;
+    if (edad <= 0 || isNaN(edad)) return false;
+    if(opcion3 < 1 || opcion2 < 1 || opcion1 === null) return false;
+    return true;
+}
+
+function validarDatosHeroe(nombre, apellido, edad, opcion1, opcion2, opcion3) {
+    if (!nombre || !apellido || !opcion1 || !opcion2 || !opcion3) return false;
+    if (edad <= 0 || isNaN(edad)) return false;
+    if(opcion3 <= 1940 || isNaN(opcion3) || opcion2 === null || opcion1 === null) return false;
+    return true;
+}
+
+
+function agregarPersona(arrayPersona)
+{
+    document.getElementById("btnAgregar").addEventListener("click", ()=>
+        {
+            visibilidadBotones("block", "none", "none");
+            ocultarDatosAbm("abmTipo", "block");
+            visibilidadForm("none", "block");
+            ocultarDatosAbm("abmVillano", "none");
+            ocultarDatosAbm("abmHeroe", "block");
+        });
+    let flag = "heroe";
+    const selPersona = document.getElementById("tipoPersona");
+            ocultarDatosAbm("abmVillano", "none");
+            ocultarDatosAbm("abmHeroe", "block");
+            flag ="heroe"
+
+    selPersona.addEventListener("change", ()=>
+        {
+            if(selPersona.value == "Villano")
+            {
+                ocultarDatosAbm("abmVillano", "block");
+                ocultarDatosAbm("abmHeroe", "none");
+                flag = "villano";
+            }else if(selPersona.value == "Heroe")
+            {
+                ocultarDatosAbm("abmVillano", "none");
+                ocultarDatosAbm("abmHeroe", "block");
+                flag ="heroe"
+            }
+        });
+
+    document.getElementById("btnAlta").addEventListener("click", function()
+        {
+            let nuevaPersona;
+            const id = verificarId(arrayPersona);
+            const nombre = document.getElementById("txtNombre").value;
+            const apellido = document.getElementById("txtApellido").value;
+            const edad = document.getElementById("txtEdad").value;
+            
+            if(flag == "villano")
+            {
+                const enemigo = document.getElementById("txtEnemigo").value;
+                const robos = document.getElementById("txtRobos").value;
+                const asesinatos = document.getElementById("txtAsesinatos").value;
+
+                if (!validarDatosVillano(nombre, apellido, edad, enemigo, robos, asesinatos)) 
+                {
+                    alert("Por favor, completa todos los campos correctamente.");
+                    return;
+                }
+                nuevaPersona = new Villano(id, nombre, apellido, edad, enemigo, robos, asesinatos);
+            }else if(flag == "heroe"){
+                const alterEgo = document.getElementById("txtAlterEgo").value;
+                const ciudad = document.getElementById("txtCiudad").value; 
+                const publicado = document.getElementById("txtPublicado").value; 
+                
+                if (!validarDatosHeroe(nombre, apellido, edad, alterEgo, ciudad, publicado)) {
+                    alert("Por favor, completa todos los campos correctamente.");
+                    return;
+                }
+                nuevaPersona = new Heroe(id, nombre, apellido, edad, alterEgo, ciudad, publicado);
+            }
+            
+            arrayPersona.push(nuevaPersona);
+            visibilidadForm("block", "none");
+            limpiarFormulario();
+            mostrarDatos(arrayPersona);
+        });
+
+    document.getElementById("btnCancelar").addEventListener("click", ()=>
+        {
+            visibilidadForm("block", "none");
+            limpiarFormulario();
+        });
+        filtrarPorTipo(arrayPersona);
+}
+
+
+function visibilidadForm(visMain, visAbm) {
+    document.getElementById("main").style.display = visMain;
+    document.getElementById("abm").style.display = visAbm;
+}
+function visibilidadBotones(visAcept, visMod, visElim)
+{
+    document.getElementById("btnAlta").style.display = visAcept;
+    document.getElementById("btnModificar").style.display = visMod;
+    document.getElementById("btnEliminar").style.display = visElim;
+}
+
+function limpiarFormulario() {
+    document.getElementById("txtNombre").value = '';
+    document.getElementById("txtApellido").value = '';
+    document.getElementById("txtEdad").value = '';
+    document.getElementById("txtAlterEgo").value = '';
+    document.getElementById("txtCiudad").value = '';
+    document.getElementById("txtPublicado").value = '';
+    document.getElementById("txtEnemigo").value = '';
+    document.getElementById("txtRobos").value = '';
+    document.getElementById("txtAsesinatos").value = '';
+}
+
+function ocultarDatosAbm(classname, visibilidad) {
+    const labelText = document.getElementsByClassName(classname);
+    for(let i=0; i< labelText.length; i++) {
+        labelText[i].style.display = visibilidad;
+    }
+}
+
+function verificarId(personas) {
+    let id = 1;
+    
+    for(let i=0; i<personas.length; i++) {
+        let idExistente = Number(personas[i].id);
+        if(idExistente === id) {
+            id++;
+        }
+    }
+    return id;
+}
+
+function main(personas) {
+    mostrarDatos(personas);
+    agregarPersona(personas);
+    visibilidadForm("block", "none");
+}
+
+main(parsearArray(personas));
