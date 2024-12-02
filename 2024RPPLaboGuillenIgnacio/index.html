@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcial Labo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="main">                 
+        <h1>Form Datos</h1>
+        <label>Filtrar Por:</label>
+        <select id="tiposDePersona">
+            <option value="Todos">Todos</option>
+            <option value="Villano">Villano</option>
+            <option value="Heroe">Heroe</option>
+        </select>
+        <section>
+            <label>Promedio Edad: </label>
+            <input type="text" id="txtPromedio">
+            <button id="btnCalcular">Calcular</button>
+        </section>
+        <section>
+            <input type="checkbox" id="checkId" name="checkTable" checked="true">
+            <label for="checkId">ID</label>
+            <input type="checkbox" id="checkNombre" name="checkTable" checked="true">
+            <label for="checkNombre">Nombre</label>
+            <input type="checkbox" id="checkApellido" name="checkTable" checked="true">
+            <label for="checkApellido">Apellido</label>
+            <input type="checkbox" id="checkEdad" name="checkTable" checked="true">
+            <label for="checkEdad">Edad</label>
+            <input type="checkbox" id="checkAlterEgo" name="checkTable" checked="true">
+            <label for="checkAlterEgo">AlterEgo</label>
+            <input type="checkbox" id="checkCiudad" name="checkTable" checked="true">
+            <label for="checkCiudad">Ciudad</label>
+            <input type="checkbox" id="checkPublicado" name="checkTable" checked="true">
+            <label for="checkPublicado">Publicado</label>
+            <input type="checkbox" id="checkEnemigo" name="checkTable" checked="true">
+            <label for="checkEnemigo">Enemigo</label>
+            <input type="checkbox" id="checkRobos" name="checkTable" checked="true">
+            <label for="checkRobos">Robos</label>
+            <input type="checkbox" id="checkAsesinatos" name="checkTable" checked="true">
+            <label for="checkAsesinatos">Asesinatos</label>
+        </section>
+        <table id="tablaPersonas">
+            <thead>
+                <tr>
+                    <th id="thid" data-column="id" class="id ordenar">Id</th>
+                    <th id="thnombre" data-column="nombre" class="nombre ordenar">Nombre</th>
+                    <th id="thapellido" data-column="apellido" class="apellido ordenar">Apellido</th>
+                    <th id="thedad" data-column="edad" class="edad ordenar">Edad</th>
+                    <th id="thalterego" data-column="alterego" class="alterego ordenar">AlterEgo</th>
+                    <th id="thciudad" data-column="ciudad" class="ciudad ordenar">Ciudad</th>
+                    <th id="thpublicado" data-column="publicado" class="publicado ordenar">Publicado</th>
+                    <th id="thenemigo" data-column="enemigo" class="enemigo ordenar">Enemigo</th>
+                    <th id="throbos" data-column="robos" class="robos ordenar">Robos</th>
+                    <th id="thasesinatos" data-column="asesinatos" class="asesinatos ordenar">Asesinatos</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyrow">
+            </tbody>
+        </table>
+        <section>
+            <button id="btnAgregar">Agregar</button>
+        </section>
+    </div>
+    <div id="abm">
+        <h1>Form ABM</h1>
+        <label for="txtNombre">Nombre: </label>
+        <input type="text" id="txtNombre" placeholder="Ingrese un nombre">
+        <section>
+            <label for="txtApellido">Apellido: </label>
+            <input type="text" id="txtApellido" placeholder="Ingrese un apellido">
+        </section>
+        <section>
+            <label for="txtEdad">Edad: </label>
+            <input type="text" id="txtEdad" placeholder="Ingrese una edad">
+        </section>
+        <label class="abmTipo">Tipo: </label>
+        <select id="tipoPersona" class="abmTipo">
+            <option value="Heroe">Heroe</option>
+            <option value="Villano">Villano</option>
+        </select>
+        <section class="abmHeroe">
+            <label for="txtAlterEgo">AlterEgo: </label>
+            <input type="text" id="txtAlterEgo" placeholder="Ingrese un título">
+        </section>
+        <section class="abmHeroe">
+            <label for="txtCiudad">Ciudad: </label>
+            <input type="text" id="txtCiudad" placeholder="Ingrese una ciudad">
+        </section>
+        <section class="abmHeroe">
+            <label for="txtPublicado">Publicado: </label>
+            <input type="text" id="txtPublicado" placeholder="Ingrese un publicado">
+        </section>
+        <section class="abmVillano">
+            <label for="txtEnemigo">Enemigo: </label>
+            <input type="text" id="txtEnemigo" placeholder="Ingrese un enemigo">
+        </section>
+        <section class="abmVillano">
+            <label for="txtRobos">Robos: </label>
+            <input type="text" id="txtRobos" placeholder="Ingrese una posición">
+        </section>
+        <section class="abmVillano">
+            <label for="txtAsesinatos">Asesinatos: </label>
+            <input type="text" id="txtAsesinatos" placeholder="Ingrese la cantidad de Asesinatos">
+        </section>
+        <button id="btnAlta">Alta</button>
+        <button id="btnModificar">Modificar</button>
+        <button id="btnEliminar">Eliminar</button>
+        <button id="btnCancelar">Cancelar</button>
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>
